@@ -1,4 +1,3 @@
-#include "Queue.h"
 #include "ExtendedTest.h"
 #include "ShortTest.h"
 #include <iostream>
@@ -11,5 +10,5 @@ int main_queue() {
 	testAllExtended();
 
 	cout << "Test end" << endl;
-
+	return 0;
 }
