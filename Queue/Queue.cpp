@@ -24,28 +24,62 @@ Queue::Queue() {
 
 void Queue::push(TElem elem) {
 	//TODO - Implementation
+	if (firstEmpty == -1) {
+		resize();
+	}
+	int newPos = allocate();
+	nodes[newPos].info = elem;
+	nodes[newPos].next = -1;
+	nodes[newPos].prev = tail;
+
+	if (tail != -1) {
+		nodes[tail].next = newPos;
+	} else {
+		head = newPos;  // if queue was empty
+	}
+	tail = newPos;
+	size++;
 }
 
 
 TElem Queue::top() const {
 	//TODO - Implementation
-	return NULL_TELEM;
+	if (isEmpty()) {
+		throw std::exception();
+	}
+	return nodes[head].info;
 }
 
 TElem Queue::pop() {
 	//TODO - Implementation
-	return NULL_TELEM;
+	if (isEmpty()) {
+		throw std::exception();
+	}
+
+	int oldHead = head;
+	TElem value = nodes[oldHead].info;
+
+	head = nodes[oldHead].next;
+	if (head != -1) {
+		nodes[head].prev = -1;
+	} else {
+		tail = -1;  // queue is now empty
+	}
+
+	free(oldHead);
+	size--;
+
+	return value;
 }
 
 bool Queue::isEmpty() const {
 	//TODO - Implementation
-	if (head == -1 && tail == -1)
-		return true;
-	return false;
+	return size == 0;
 }
 
 Queue::~Queue() {
 	//TODO - Implementation
+	delete[] nodes;
 }
 
 int Queue::allocate() { // returneaza indicele la care trebuie alocata noua valoare
@@ -69,7 +103,7 @@ void Queue::free(int position) { // adauga un nod in "lista de noduri libere"
 void Queue::resize() { // dubleaza capacitatea si reface lista de noduri libere
 	int newCapacity = capacity*2;
 	DLLANode* newNodes = new DLLANode[newCapacity];
-	for (int i = 0; i < newCapacity; i++)
+	for (int i = 0; i < capacity; i++)
 		newNodes[i] = nodes[i];
 	for (int i = capacity; i < newCapacity-1; i++) {
 		newNodes[i].next = i + 1;
