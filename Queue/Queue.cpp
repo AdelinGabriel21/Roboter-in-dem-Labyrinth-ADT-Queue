@@ -5,17 +5,14 @@
 using namespace std;
 
 
-int Queue::allocate() {
-}
-
-void Queue::free(int position) {
-}
-
-void Queue::resize() {
-}
-
 Queue::Queue() {
 	//TODO - Implementation
+	capacity = 10;
+	size = 0;
+	head = tail = -1;
+	firstEmpty = -1;
+	nodes = new DLLANode[capacity]();
+
 }
 
 
@@ -42,5 +39,14 @@ bool Queue::isEmpty() const {
 
 Queue::~Queue() {
 	//TODO - Implementation
+}
+
+int Queue::allocate() {
+}
+
+void Queue::free(int position) {
+}
+
+void Queue::resize() {
 }
 
