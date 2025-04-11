@@ -1,0 +1,3 @@
+C:/Users/adeli/Documents/Adelin/Facultate/Anul I/Semestrul II/DSA/Laborator/L3/Queue/cmake-build-debug/CMakeFiles/Queue.dir
+C:/Users/adeli/Documents/Adelin/Facultate/Anul I/Semestrul II/DSA/Laborator/L3/Queue/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/adeli/Documents/Adelin/Facultate/Anul I/Semestrul II/DSA/Laborator/L3/Queue/cmake-build-debug/CMakeFiles/rebuild_cache.dir
