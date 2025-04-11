@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 Queue::Queue() {
 	//TODO - Implementation
 	capacity = 10;
@@ -20,7 +19,6 @@ Queue::Queue() {
 	nodes[capacity - 1].next = -1;
 	nodes[capacity - 1].prev = -1;
 }
-
 
 void Queue::push(TElem elem) {
 	//TODO - Implementation
@@ -40,7 +38,6 @@ void Queue::push(TElem elem) {
 	tail = newPos;
 	size++;
 }
-
 
 TElem Queue::top() const {
 	//TODO - Implementation
@@ -93,6 +90,8 @@ int Queue::allocate() { // returneaza indicele la care trebuie alocata noua valo
 }
 
 void Queue::free(int position) { // adauga un nod in "lista de noduri libere"
+	// cand un nou element este "eliberat" practic valoarea sa ramane, dar se schimba indicii in asa fel incat sa nu mai fie luat in considerare
+	// cand adaugam practic suprascriem valuoarea scrisa acolo
 	nodes[position].next = firstEmpty;
 	nodes[position].prev = -1;
 	if (firstEmpty != -1)
