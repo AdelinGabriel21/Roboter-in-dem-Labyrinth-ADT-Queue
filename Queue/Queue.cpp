@@ -12,7 +12,10 @@ Queue::Queue() {
 	head = tail = -1;
 	firstEmpty = -1;
 	nodes = new DLLANode[capacity]();
-
+	int index = 1;
+	for (auto node : nodes) {
+		node.next = index++;
+	}
 }
 
 
@@ -28,14 +31,16 @@ TElem Queue::top() const {
 
 TElem Queue::pop() {
 	//TODO - Implementation
+
 	return NULL_TELEM;
 }
 
 bool Queue::isEmpty() const {
 	//TODO - Implementation
+	if (head == -1 && tail == -1)
+		return true;
 	return false;
 }
-
 
 Queue::~Queue() {
 	//TODO - Implementation

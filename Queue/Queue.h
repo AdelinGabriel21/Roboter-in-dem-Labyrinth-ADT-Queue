@@ -11,7 +11,7 @@ typedef int TElem;
 // In einem rechteckigen Labyrinth gibt es besetzte (X) und leere Zellen (*). Der Roboter
 // kann sich in vier Richtungen bewegen: Nord, Süd, Ost, West.
 
-/**
+/*
 	X	*	*	X	X	X	*	*
 	X	*	X	*	*	*	*	*
 	X	*	*	*	*	*	X	*
