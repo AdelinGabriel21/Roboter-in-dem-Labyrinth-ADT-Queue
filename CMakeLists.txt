@@ -16,4 +16,6 @@ add_executable(L3
         Queue/ShortTest.h
         Labyrinth/Labyrinth.h
         main.cpp
-        Labyrinth/Labyrinth.cpp)
+        Labyrinth/Labyrinth.cpp
+        Labyrinth/ShortTestLabyrinth.cpp
+        Labyrinth/ShortTestLabyrinth.h)
