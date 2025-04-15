@@ -19,8 +19,8 @@ private:
     bool isValid(int r, int c);
     bool isExit(int r, int c);
 
+    bool bfs(vector<pair<int, int>>* pathVec = nullptr);
 public:
-    /// NU UITATI SA SCRIETI COMENTARIILE SI COMPLEXITATILE
     Labyrinth(const string& fileName);
 
     bool hasPath();

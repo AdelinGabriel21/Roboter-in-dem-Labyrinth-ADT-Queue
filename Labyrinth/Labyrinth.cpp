@@ -3,10 +3,14 @@
 //
 
 #include "Labyrinth.h"
+
+#include <algorithm>
 #include <string>
 #include <sstream>
 #include <stdexcept>
 #include <fstream>
+
+#include "Queue.h"
 
 using namespace std;
 
@@ -76,12 +80,65 @@ bool Labyrinth::isExit(int r, int c){
     return false;
 }
 
+bool Labyrinth::bfs(vector<pair<int, int>>* pathVec) {
+    vector<vector<bool>> visited(rows, vector<bool>(cols, false));
+    vector<vector<pair<int, int>>> parent(rows, vector<pair<int, int>>(cols, {-1, -1}));
 
+    Queue q;
+    int startRow = start.first;
+    int startCol = start.second;
+    q.push(startRow*cols + startCol);
+    visited[startRow][startCol] = true;
 
+    int directionRow[] = {-1, 1, 0, 0};
+    int directionCol[] = {0, 0, -1, 1};
 
+    while (!q.isEmpty()) {
+        int encodedElem = q.pop();
+        int r = encodedElem / cols;
+        int c = encodedElem % cols;
 
+        if (isExit(r, c)) {
+            if (pathVec) {
+                vector<pair<int, int>> path;
+                pair<int, int> current = {r, c};
+                while (current != make_pair(-1, -1)) {
+                    path.push_back(current);
+                    current = parent[current.first][current.second];
+                }
+                reverse(path.begin(), path.end());
+                *pathVec = path;
+            }
+            return true;
+        }
+        for (int i = 0; i < 4; ++i) {
+            int newRow = r + directionRow[i];
+            int newCol = c + directionCol[i];
 
+            if (isValid(newRow, newCol) && !visited[newRow][newCol]) {
+                visited[newRow][newCol] = true;
+                parent[newRow][newCol] = {r, c};
+                q.push(newRow * cols + newCol);
+            }
+        }
+    }
 
+    return false;
+}
+
+bool Labyrinth::hasPath() {
+    return bfs(nullptr);  // Just check if a path exists
+}
+
+vector<pair<int, int>> Labyrinth::getPath() {
+    vector<pair<int, int>> path;
+    bfs(&path); // Fills path if one exists
+    return path;
+}
+
+vector<pair<int, int>> Labyrinth::getShortestPath() {
+    return getPath();  // In BFS, the first found path is the shortest
+}
 
 void Labyrinth::printPath(const vector<pair<int, int>>& path) {
     if (path.empty()) {
@@ -100,7 +157,7 @@ void Labyrinth::printPath(const vector<pair<int, int>>& path) {
 
     for (const auto& row : gridCopy) {
         for (char cell : row) {
-            cout << cell << '\t';
+            cout << cell << ' ';
         }
         cout << endl;
     }
