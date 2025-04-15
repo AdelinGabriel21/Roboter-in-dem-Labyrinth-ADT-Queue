@@ -58,3 +58,50 @@ Labyrinth::Labyrinth(const string& filename) {
     rows = grid.size();
     cols = grid[0].size();
 }
+
+bool Labyrinth::isValid(int r, int c) {
+    if (r >= 0 && r < rows && c >= 0 && c < cols && (grid[r][c] == '*' || grid[r][c] == 'R')) {
+        return true;
+    }
+    return false;
+}
+
+bool Labyrinth::isExit(int r, int c){
+    if (grid[r][c] != '*') {
+        return false;
+    }
+    if (r == 0 || r == rows - 1 || c == 0 || c == cols - 1) {
+        return true;
+    }
+    return false;
+}
+
+
+
+
+
+
+
+
+void Labyrinth::printPath(const vector<pair<int, int>>& path) {
+    if (path.empty()) {
+        cout << "No path found." << endl;
+        return;
+    }
+
+    vector<vector<char>> gridCopy = grid;
+
+    for (const auto& [r, c] : path) {
+        if (grid[r][c] == 'R') {
+            continue;
+        }
+        gridCopy[r][c] = 'o';
+    }
+
+    for (const auto& row : gridCopy) {
+        for (char cell : row) {
+            cout << cell << '\t';
+        }
+        cout << endl;
+    }
+}
