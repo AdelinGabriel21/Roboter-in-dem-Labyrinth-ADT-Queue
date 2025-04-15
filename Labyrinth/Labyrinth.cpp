@@ -126,6 +126,35 @@ bool Labyrinth::bfs(vector<pair<int, int>>* pathVec) {
     return false;
 }
 
+bool Labyrinth::dfs(int r, int c, vector<vector<bool>>& visited, vector<pair<int, int>>& path) {
+    if (!isValid(r, c) || visited[r][c]) {
+        return false;
+    }
+
+    visited[r][c] = true;
+    path.emplace_back(r, c);
+
+    if (isExit(r, c)) {
+        return true;
+    }
+
+    int directionRow[] = {-1, 1, 0, 0};
+    int directionCol[] = {0, 0, -1, 1};
+
+    for (int i = 0; i < 4; ++i) {
+        int newRow = r + directionRow[i];
+        int newCol = c + directionCol[i];
+
+        if (dfs(newRow, newCol, visited, path)) {
+            return true;
+        }
+    }
+
+    // Backtrack if no path was found through this cell
+    path.pop_back();
+    return false;
+}
+
 bool Labyrinth::hasPath() {
     return bfs(nullptr);  // Just check if a path exists
 }
@@ -133,6 +162,13 @@ bool Labyrinth::hasPath() {
 vector<pair<int, int>> Labyrinth::getPath() {
     vector<pair<int, int>> path;
     bfs(&path); // Fills path if one exists
+    return path;
+}
+
+vector<pair<int, int>> Labyrinth::getPathDFS() {
+    vector<pair<int, int>> path;
+    vector<vector<bool>> visited(rows, vector<bool>(cols, false));
+    dfs(start.first, start.second, visited, path);
     return path;
 }
 
@@ -160,5 +196,17 @@ void Labyrinth::printPath(const vector<pair<int, int>>& path) {
             cout << cell << ' ';
         }
         cout << endl;
+    }
+}
+
+void Labyrinth::printPathPair(const vector<pair<int, int>>& path) {
+    if (path.empty()) {
+        cout << "No path found." << endl;
+        return;
+    }
+
+    cout << "Path (" << path.size() << " steps):" << endl;
+    for (const auto& [r, c] : path) {
+        cout << "(" << r << ", " << c << ")" << endl;
     }
 }
