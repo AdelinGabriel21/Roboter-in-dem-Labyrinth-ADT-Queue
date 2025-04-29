@@ -35,7 +35,7 @@ void test_all_labyrinth(){
                lab.printPath(path1);
                cout << "\n\n";
 
-               // extra
+               // extra - random path with DFS
                vector<pair<int, int>> path2 = lab.getPathDFS();
                cout << "A path (marked with 'o'):\n";
                lab.printPathPair(path2);
@@ -48,4 +48,14 @@ void test_all_labyrinth(){
      } catch (const exception& e) {
           cerr << "Error: " << e.what() << endl;
      }
+
+     vector<vector<char>> grid = {
+          {'X', 'X', 'X', 'X', 'X'},
+          {'X', 'R', '*', '*', 'X'},
+          {'X', '*', 'X', '*', 'X'},
+          {'X', '*', '*', '*', 'X'},
+          {'X', 'X', 'X', 'X', 'X'}
+     };
+     Labyrinth lab1 =Labyrinth(grid, {2, 2});
+     assert (lab1.hasPath() == false);
 }
