@@ -23,6 +23,8 @@ using namespace std;
 Labyrinth::Labyrinth(const vector<vector<char>>& grid, const pair<int, int>& start) {
     this->grid = grid;
     this->start = start;
+    rows = grid.size();
+    cols = grid[0].size();
 }
 
 
