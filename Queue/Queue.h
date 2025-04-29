@@ -47,9 +47,16 @@ private:
 	int firstEmpty;
 	DLLANode* nodes;
 
+	// allocates a new node in the queue
 	int allocate();
+
+	// frees a node in the queue
 	void free(int position);
+
+	// resizes the queue to a larger size
 	void resize_up();
+
+	// resizes the queue to a smaller size
 	void resize_down();
 
 public:
