@@ -49,7 +49,8 @@ private:
 
 	int allocate();
 	void free(int position);
-	void resize();
+	void resize_up();
+	void resize_down();
 
 public:
 	Queue();

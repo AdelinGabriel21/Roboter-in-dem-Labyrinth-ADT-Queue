@@ -5,6 +5,13 @@
 
 using namespace std;
 
+
+/**
+ * Constructor
+ * Worst case: θ(n)
+ * Average case: θ(n)
+ * Best case: θ(n)
+ * */
 Queue::Queue() {
 	//TODO - Implementation
 	capacity = 10;
@@ -20,10 +27,17 @@ Queue::Queue() {
 	nodes[capacity - 1].prev = -1;
 }
 
+
+/**
+ * Adds new element to the end of the queue
+ * Worst case: θ(n) (when resizing is needed)
+ * Average case => Amortized complexity: O(1)
+ * Best case: θ(1)
+ * */
 void Queue::push(TElem elem) {
 	//TODO - Implementation
 	if (firstEmpty == -1) {
-		resize();
+		resize_up();
 	}
 	int newPos = allocate();
 	nodes[newPos].info = elem;
@@ -39,6 +53,13 @@ void Queue::push(TElem elem) {
 	size++;
 }
 
+
+/**
+ * Returns the element from the front of the queue
+ * Worst case: θ(1)
+ * Average case: θ(1)
+ * Best case: θ(1)
+ * */
 TElem Queue::top() const {
 	//TODO - Implementation
 	if (isEmpty()) {
@@ -47,6 +68,13 @@ TElem Queue::top() const {
 	return nodes[head].info;
 }
 
+
+/**
+ * Removes and returns the element from the front of the queue
+ * Worst case: θ(n) (when resizing is needed)
+ * Average case => Amortized complexity: O(1)
+ * Best case: θ(1)
+ * */
 TElem Queue::pop() {
 	//TODO - Implementation
 	if (isEmpty()) {
@@ -66,19 +94,44 @@ TElem Queue::pop() {
 	free(oldHead);
 	size--;
 
+	if (size <= capacity / 4 && capacity >= 10) {
+		resize_down();
+	}
+
 	return value;
 }
 
+
+/**
+ * Checks if the queue is empty
+ * Worst case: θ(1)
+ * Average case: θ(1)
+ * Best case: θ(1)
+ * */
 bool Queue::isEmpty() const {
 	//TODO - Implementation
 	return size == 0;
 }
 
+
+/**
+ * Destructor
+ * Worst case: θ(n)
+ * Average case: θ(n)
+ * Best case: θ(n)
+ * */
 Queue::~Queue() {
 	//TODO - Implementation
 	delete[] nodes;
 }
 
+
+/**
+ * Allocates a new node in the queue
+ * Worst case: θ(1)
+ * Average case: θ(1)
+ * Best case: θ(1)
+ * */
 int Queue::allocate() { // returneaza indicele la care trebuie alocata noua valoare
 	if (firstEmpty == -1)
 		return -1;
@@ -89,6 +142,13 @@ int Queue::allocate() { // returneaza indicele la care trebuie alocata noua valo
 	return newElem;
 }
 
+
+/**
+ * Frees a node in the queue
+ * Worst case: θ(1)
+ * Average case: θ(1)
+ * Best case: θ(1)
+ * */
 void Queue::free(int position) { // adauga un nod in "lista de noduri libere"
 	// cand un nou element este "eliberat" practic valoarea sa ramane, dar se schimba indicii in asa fel incat sa nu mai fie luat in considerare
 	// cand adaugam practic suprascriem valuoarea scrisa acolo
@@ -99,9 +159,17 @@ void Queue::free(int position) { // adauga un nod in "lista de noduri libere"
 	firstEmpty = position;
 }
 
-void Queue::resize() { // dubleaza capacitatea si reface lista de noduri libere
+
+/**
+ * Doubles the capacity of the queue and rebuilds the free node list
+ * Worst case: θ(n)
+ * Average case: θ(n)
+ * Best case: θ(n)
+ * */
+void Queue::resize_up() {
 	int newCapacity = capacity*2;
 	DLLANode* newNodes = new DLLANode[newCapacity];
+	// Copy the active elements to the new array
 	for (int i = 0; i < capacity; i++)
 		newNodes[i] = nodes[i];
 	for (int i = capacity; i < newCapacity-1; i++) {
@@ -111,6 +179,54 @@ void Queue::resize() { // dubleaza capacitatea si reface lista de noduri libere
 	newNodes[newCapacity-1].next = -1;
 	newNodes[newCapacity-1].prev = -1;
 	firstEmpty = capacity;
+
+	delete[] nodes;
+	nodes = newNodes;
+	capacity = newCapacity;
+}
+
+
+/**
+ * Halves the capacity of the queue and rebuilds the free node list
+ * Worst case: θ(n)
+ * Average case: θ(n)
+ * Best case: θ(n)
+ * */
+void Queue::resize_down() {
+	int newCapacity = capacity / 2;
+	DLLANode* newNodes = new DLLANode[newCapacity];
+
+	int current = head;
+	int index = 0;
+
+	// Copy the active elements to the new array
+	while (current != -1 && index < newCapacity) {
+		newNodes[index] = nodes[current];
+		if (index > 0) {
+			newNodes[index].prev = index - 1;
+		}
+		if (index < newCapacity - 1) {
+			newNodes[index].next = index + 1;
+		}
+		current = nodes[current].next;
+		index++;
+	}
+
+	// Update head and tail
+	head = 0;
+	tail = index - 1;
+	if (tail >= 0) {
+		newNodes[tail].next = -1;
+	}
+
+	// Rebuild the free node list
+	for (int i = index; i < newCapacity - 1; i++) {
+		newNodes[i].next = i + 1;
+		newNodes[i].prev = -1;
+	}
+	newNodes[newCapacity - 1].next = -1;
+	newNodes[newCapacity - 1].prev = -1;
+	firstEmpty = index;
 
 	delete[] nodes;
 	nodes = newNodes;
