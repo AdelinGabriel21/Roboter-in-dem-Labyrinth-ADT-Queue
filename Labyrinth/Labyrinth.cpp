@@ -14,11 +14,40 @@
 
 using namespace std;
 
-Labyrinth::Labyrinth(const string& filename) {
+
+/** Constructor
+* Worst: θ(1)
+* Average: θ(1)
+* Best: θ(1)
+*/
+Labyrinth::Labyrinth(const vector<vector<char>>& grid, const pair<int, int>& start) {
+    this->grid = grid;
+    this->start = start;
+}
+
+
+/** Constructor using file reading
+* Worst: θ(n*n)
+* Average: θ(n*n)
+* Best: θ(n*n)
+*/
+Labyrinth::Labyrinth(const string& fileName) {
+    grid = read_grid_from_file(fileName);
+    rows = grid.size();
+    cols = grid[0].size();
+}
+
+
+/** Creats a grid by reading it from a file.
+* Worst: θ(n*n)
+* Average: θ(n*n)
+* Best: θ(n*n)
+*/
+vector<vector<char>> Labyrinth::read_grid_from_file(const string& fileName) {
     ifstream file;
-    file.open(filename);
+    file.open(fileName);
     if (!file) {
-        throw std::runtime_error("File not found: " + filename);
+        throw std::runtime_error("File not found: " + fileName);
     }
 
     string line;
@@ -58,11 +87,15 @@ Labyrinth::Labyrinth(const string& filename) {
         throw std::runtime_error("Start position R not found");
     }
 
-    grid = tempGrid;
-    rows = grid.size();
-    cols = grid[0].size();
+    return tempGrid;
 }
 
+
+/** Verifies if a position is valid
+* Worst: θ(1)
+* Average: θ(1)
+* Best: θ(1)
+*/
 bool Labyrinth::isValid(int r, int c) {
     if (r >= 0 && r < rows && c >= 0 && c < cols && (grid[r][c] == '*' || grid[r][c] == 'R')) {
         return true;
@@ -70,6 +103,12 @@ bool Labyrinth::isValid(int r, int c) {
     return false;
 }
 
+
+/** Verifies if a position is exit
+* Worst: θ(1)
+* Average: θ(1)
+* Best: θ(1)
+*/
 bool Labyrinth::isExit(int r, int c){
     if (grid[r][c] != '*') {
         return false;
@@ -80,6 +119,12 @@ bool Labyrinth::isExit(int r, int c){
     return false;
 }
 
+
+/** Breadth-first search algorithm
+* Worst: θ(n)
+* Average: θ(n)
+* Best: θ(1)
+*/
 bool Labyrinth::bfs(vector<pair<int, int>>* pathVec) {
     vector<vector<bool>> visited(rows, vector<bool>(cols, false));
     vector<vector<pair<int, int>>> parent(rows, vector<pair<int, int>>(cols, {-1, -1}));
@@ -126,6 +171,12 @@ bool Labyrinth::bfs(vector<pair<int, int>>* pathVec) {
     return false;
 }
 
+
+/** Depth-first search algorithm
+* Worst: θ(n)
+* Average: θ(n)
+* Best: θ(1)
+*/
 bool Labyrinth::dfs(int r, int c, vector<vector<bool>>& visited, vector<pair<int, int>>& path) {
     if (!isValid(r, c) || visited[r][c]) {
         return false;
@@ -155,16 +206,34 @@ bool Labyrinth::dfs(int r, int c, vector<vector<bool>>& visited, vector<pair<int
     return false;
 }
 
+
+/** Uses Breadth-first search algorithm to check if a path exists
+* Worst: θ(n)
+* Average: θ(n)
+* Best: θ(1)
+*/
 bool Labyrinth::hasPath() {
     return bfs(nullptr);  // Just check if a path exists
 }
 
+
+/** Uses Breadth-first search algorithm to find a path
+* Worst: θ(n)
+* Average: θ(n)
+* Best: θ(1)
+*/
 vector<pair<int, int>> Labyrinth::getPath() {
     vector<pair<int, int>> path;
     bfs(&path); // Fills path if one exists
     return path;
 }
 
+
+/** Uses Depth-first search algorithm to find a path
+* Worst: θ(n)
+* Average: θ(n)
+* Best: θ(1)
+*/
 vector<pair<int, int>> Labyrinth::getPathDFS() {
     vector<pair<int, int>> path;
     vector<vector<bool>> visited(rows, vector<bool>(cols, false));
@@ -172,10 +241,22 @@ vector<pair<int, int>> Labyrinth::getPathDFS() {
     return path;
 }
 
+
+/** Uses Breadth-first search algorithm to find the shortest path
+* Worst: θ(n)
+* Average: θ(n)
+* Best: θ(1)
+*/
 vector<pair<int, int>> Labyrinth::getShortestPath() {
     return getPath();  // In BFS, the first found path is the shortest
 }
 
+
+/** Prints the path on the grid
+* Worst: θ(n*n)
+* Average: θ(n*n)
+* Best: θ(1)
+*/
 void Labyrinth::printPath(const vector<pair<int, int>>& path) {
     if (path.empty()) {
         cout << "No path found." << endl;
@@ -199,6 +280,12 @@ void Labyrinth::printPath(const vector<pair<int, int>>& path) {
     }
 }
 
+
+/** Prints the path as pairs
+* Worst: θ(n*n)
+* Average: θ(n*n)
+* Best: θ(1)
+*/
 void Labyrinth::printPathPair(const vector<pair<int, int>>& path) {
     if (path.empty()) {
         cout << "No path found." << endl;
