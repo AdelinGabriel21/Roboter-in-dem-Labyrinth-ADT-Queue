@@ -47,7 +47,7 @@ void Queue::push(TElem elem) {
 	if (tail != -1) {
 		nodes[tail].next = newPos;
 	} else {
-		head = newPos;  // if queue was empty
+		head = newPos;
 	}
 	tail = newPos;
 	size++;
@@ -63,7 +63,7 @@ void Queue::push(TElem elem) {
 TElem Queue::top() const {
 	//TODO - Implementation
 	if (isEmpty()) {
-		throw std::exception();
+		throw exception();
 	}
 	return nodes[head].info;
 }
@@ -78,7 +78,7 @@ TElem Queue::top() const {
 TElem Queue::pop() {
 	//TODO - Implementation
 	if (isEmpty()) {
-		throw std::exception();
+		throw exception();
 	}
 
 	int oldHead = head;
@@ -88,7 +88,7 @@ TElem Queue::pop() {
 	if (head != -1) {
 		nodes[head].prev = -1;
 	} else {
-		tail = -1;  // queue is now empty
+		tail = -1;
 	}
 
 	free(oldHead);
@@ -116,9 +116,9 @@ bool Queue::isEmpty() const {
 
 /**
  * Destructor
- * Worst case: θ(n)
- * Average case: θ(n)
- * Best case: θ(n)
+ * Worst case: θ(1)
+ * Average case: θ(1)
+ * Best case: θ(1)
  * */
 Queue::~Queue() {
 	//TODO - Implementation
@@ -132,9 +132,7 @@ Queue::~Queue() {
  * Average case: θ(1)
  * Best case: θ(1)
  * */
-int Queue::allocate() { // returneaza indicele la care trebuie alocata noua valoare
-	if (firstEmpty == -1)
-		return -1;
+int Queue::allocate() {
 	int newElem = firstEmpty;
 	firstEmpty = nodes[firstEmpty].next;
 	if (firstEmpty != -1)
@@ -149,9 +147,7 @@ int Queue::allocate() { // returneaza indicele la care trebuie alocata noua valo
  * Average case: θ(1)
  * Best case: θ(1)
  * */
-void Queue::free(int position) { // adauga un nod in "lista de noduri libere"
-	// cand un nou element este "eliberat" practic valoarea sa ramane, dar se schimba indicii in asa fel incat sa nu mai fie luat in considerare
-	// cand adaugam practic suprascriem valuoarea scrisa acolo
+void Queue::free(int position) {
 	nodes[position].next = firstEmpty;
 	nodes[position].prev = -1;
 	if (firstEmpty != -1)
@@ -169,7 +165,7 @@ void Queue::free(int position) { // adauga un nod in "lista de noduri libere"
 void Queue::resize_up() {
 	int newCapacity = capacity*2;
 	DLLANode* newNodes = new DLLANode[newCapacity];
-	// Copy the active elements to the new array
+
 	for (int i = 0; i < capacity; i++)
 		newNodes[i] = nodes[i];
 	for (int i = capacity; i < newCapacity-1; i++) {
@@ -199,7 +195,6 @@ void Queue::resize_down() {
 	int current = head;
 	int index = 0;
 
-	// Copy the active elements to the new array
 	while (current != -1 && index < newCapacity) {
 		newNodes[index] = nodes[current];
 		if (index > 0) {
@@ -212,14 +207,12 @@ void Queue::resize_down() {
 		index++;
 	}
 
-	// Update head and tail
 	head = 0;
 	tail = index - 1;
 	if (tail >= 0) {
 		newNodes[tail].next = -1;
 	}
 
-	// Rebuild the free node list
 	for (int i = index; i < newCapacity - 1; i++) {
 		newNodes[i].next = i + 1;
 		newNodes[i].prev = -1;
