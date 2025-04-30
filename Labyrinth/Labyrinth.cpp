@@ -22,6 +22,12 @@ using namespace std;
 */
 Labyrinth::Labyrinth(const vector<vector<char>>& grid, const pair<int, int>& start) {
     this->grid = grid;
+    if (grid.empty() || grid[0].empty()) {
+        throw runtime_error("Grid is empty");
+    }
+    if (start.first < 0 || start.first >= grid.size() || start.second < 0 || start.second >= grid[0].size()) {
+        throw runtime_error("Start position is out of bounds");
+    }
     this->start = start;
     rows = grid.size();
     cols = grid[0].size();
